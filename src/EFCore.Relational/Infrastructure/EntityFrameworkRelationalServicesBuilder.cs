@@ -97,7 +97,8 @@ public class EntityFrameworkRelationalServicesBuilder : EntityFrameworkServicesB
                 new ServiceCharacteristics(ServiceLifetime.Scoped, multipleRegistrations: true)
             },
             { typeof(IMemberTranslatorPlugin), new ServiceCharacteristics(ServiceLifetime.Scoped, multipleRegistrations: true) },
-            { typeof(IMigratorPlugin), new ServiceCharacteristics(ServiceLifetime.Singleton, multipleRegistrations: true) }
+            { typeof(IMigratorPlugin), new ServiceCharacteristics(ServiceLifetime.Singleton, multipleRegistrations: true) },
+            { typeof(IRelationalSingletonOptions), new ServiceCharacteristics(ServiceLifetime.Singleton) },
         };
 
     /// <summary>
@@ -193,6 +194,8 @@ public class EntityFrameworkRelationalServicesBuilder : EntityFrameworkServicesB
         TryAdd<ILiftableConstantFactory>(p => p.GetRequiredService<IRelationalLiftableConstantFactory>());
         TryAdd<IRelationalLiftableConstantFactory, RelationalLiftableConstantFactory>();
         TryAdd<ILiftableConstantProcessor, RelationalLiftableConstantProcessor>();
+        TryAdd<IRelationalSingletonOptions, RelationalSingletonOptions>();
+        TryAdd<ISingletonOptions, IRelationalSingletonOptions>(p => p.GetRequiredService<IRelationalSingletonOptions>());
 
         ServiceCollectionMap.GetInfrastructure()
             .AddDependencySingleton<RelationalSqlGenerationHelperDependencies>()

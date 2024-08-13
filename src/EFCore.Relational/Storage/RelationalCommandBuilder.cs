@@ -7,7 +7,7 @@ namespace Microsoft.EntityFrameworkCore.Storage;
 public class RelationalCommandBuilder : IRelationalCommandBuilder
 {
     private readonly List<IRelationalParameter> _parameters = [];
-    private readonly IndentedStringBuilder _commandTextBuilder = new();
+    private readonly IndentedStringBuilder _commandTextBuilder;
 
     /// <summary>
     ///     <para>
@@ -23,6 +23,9 @@ public class RelationalCommandBuilder : IRelationalCommandBuilder
         RelationalCommandBuilderDependencies dependencies)
     {
         Dependencies = dependencies;
+
+        var lineEnding = dependencies.ContextOptions.LineEnding;
+        _commandTextBuilder = new IndentedStringBuilder(lineEnding);
     }
 
     /// <summary>

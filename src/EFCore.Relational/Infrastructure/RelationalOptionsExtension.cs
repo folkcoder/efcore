@@ -26,6 +26,7 @@ public abstract class RelationalOptionsExtension : IDbContextOptionsExtension
     private string? _connectionString;
     private DbConnection? _connection;
     private bool _connectionOwned;
+    private LineEnding? _commandLineEnding;
     private int? _commandTimeout;
     private int? _maxBatchSize;
     private int? _minBatchSize;
@@ -55,6 +56,7 @@ public abstract class RelationalOptionsExtension : IDbContextOptionsExtension
         _connection = copyFrom._connection;
         _connectionOwned = copyFrom._connectionOwned;
         _commandTimeout = copyFrom._commandTimeout;
+        _commandLineEnding = copyFrom._commandLineEnding;
         _maxBatchSize = copyFrom._maxBatchSize;
         _minBatchSize = copyFrom._minBatchSize;
         _useRelationalNulls = copyFrom._useRelationalNulls;
@@ -270,6 +272,27 @@ public abstract class RelationalOptionsExtension : IDbContextOptionsExtension
         var clone = Clone();
 
         clone._querySplittingBehavior = querySplittingBehavior;
+
+        return clone;
+    }
+
+    /// <summary>
+    ///     The <see cref="CommandLineEnding" /> to use when generating commands.
+    /// </summary>
+    public virtual LineEnding CommandLineEnding
+        => _commandLineEnding ?? LineEnding.System;
+
+    /// <summary>
+    ///     Creates a new instance with all options the same as for this instance, but with the given option changed.
+    ///     It is unusual to call this method directly. Instead, use <see cref="DbContextOptionsBuilder" />.
+    /// </summary>
+    /// <param name="lineEnding">The option to change.</param>
+    /// <returns>A new instance with the option changed.</returns>
+    public virtual RelationalOptionsExtension WithCommandLineEnding(LineEnding lineEnding)
+    {
+        var clone = Clone();
+
+        clone._commandLineEnding = lineEnding;
 
         return clone;
     }
@@ -520,6 +543,11 @@ public abstract class RelationalOptionsExtension : IDbContextOptionsExtension
                     if (Extension._querySplittingBehavior != null)
                     {
                         builder.Append("QuerySplittingBehavior=").Append(Extension._querySplittingBehavior).Append(' ');
+                    }
+
+                    if (Extension._commandLineEnding != null)
+                    {
+                        builder.Append("CommandLineEnding=").Append(Extension._commandLineEnding).Append(' ');
                     }
 
                     if (Extension._migrationsAssembly != null)

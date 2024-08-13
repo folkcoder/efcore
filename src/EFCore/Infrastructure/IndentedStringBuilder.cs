@@ -23,6 +23,7 @@ public class IndentedStringBuilder
     private const byte IndentSize = 4;
     private int _indent;
     private bool _indentPending = true;
+    private readonly string _lineEnding = Environment.NewLine;
 
     private readonly StringBuilder _stringBuilder = new();
 
@@ -38,6 +39,27 @@ public class IndentedStringBuilder
     /// </summary>
     public virtual int Length
         => _stringBuilder.Length;
+
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="IndentedStringBuilder" /> class.
+    /// </summary>
+    public IndentedStringBuilder()
+    {
+    }
+
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="IndentedStringBuilder" /> class.
+    /// </summary>
+    /// <param name="lineEnding">The line ending type that should be used.</param>
+    public IndentedStringBuilder(LineEnding lineEnding)
+    {
+        _lineEnding = lineEnding switch
+        {
+            LineEnding.Unix => "\n",
+            LineEnding.Windows => "\r\n",
+            _ => Environment.NewLine,
+        };
+    }
 
     /// <summary>
     ///     Appends the current indent and then the given string to the string being built.
@@ -141,7 +163,8 @@ public class IndentedStringBuilder
             DoIndent();
         }
 
-        _stringBuilder.AppendLine(value);
+        _stringBuilder.Append(value);
+        _stringBuilder.Append(_lineEnding);
 
         _indentPending = true;
 
@@ -158,6 +181,7 @@ public class IndentedStringBuilder
         DoIndent();
 
         _stringBuilder.Append(value);
+        _stringBuilder.Append(_lineEnding);
 
         _indentPending = true;
 

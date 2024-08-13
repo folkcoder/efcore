@@ -45,15 +45,22 @@ public sealed record RelationalCommandBuilderDependencies
     /// </remarks>
     [EntityFrameworkInternal]
     public RelationalCommandBuilderDependencies(
+        IRelationalSingletonOptions contextOptions,
         IRelationalTypeMappingSource typeMappingSource,
         IExceptionDetector exceptionDetector)
     {
+        ContextOptions = contextOptions;
         ExceptionDetector = exceptionDetector;
 
 #pragma warning disable CS0618 // Type or member is obsolete
         TypeMappingSource = typeMappingSource;
 #pragma warning restore CS0618 // Type or member is obsolete
     }
+
+    /// <summary>
+    ///     Options for the current <see cref="DbContext" /> instance.
+    /// </summary>
+    public IRelationalSingletonOptions ContextOptions { get; init; }
 
     /// <summary>
     ///     The exception detector.

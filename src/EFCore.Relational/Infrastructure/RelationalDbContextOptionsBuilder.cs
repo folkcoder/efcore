@@ -147,6 +147,13 @@ public abstract class RelationalDbContextOptionsBuilder<TBuilder, TExtension> : 
         => WithOption(e => (TExtension)e.WithUseQuerySplittingBehavior(querySplittingBehavior));
 
     /// <summary>
+    ///     Configures the <see cref="LineEnding" /> to use when generating SQL commands.
+    /// </summary>
+    /// <returns>The same builder instance so that multiple calls can be chained.</returns>
+    public virtual TBuilder UseCommandLineEnding(LineEnding lineEnding)
+        => WithOption(e => (TExtension)e.WithCommandLineEnding(lineEnding));
+
+    /// <summary>
     ///     Configures the context to use the provided <see cref="IExecutionStrategy" />.
     /// </summary>
     /// <remarks>
