@@ -115,6 +115,14 @@ namespace Microsoft.EntityFrameworkCore.Diagnostics
                 annotation, annotatable);
 
         /// <summary>
+        ///     The '{parameter}' value passed to '{methodName}' must be a constant.
+        /// </summary>
+        public static string ArgumentNotConstant(object? parameter, object? methodName)
+            => string.Format(
+                GetString("ArgumentNotConstant", nameof(parameter), nameof(methodName)),
+                parameter, methodName);
+
+        /// <summary>
         ///     The property '{property}' of the argument '{argument}' cannot be null.
         /// </summary>
         public static string ArgumentPropertyNull(object? property, object? argument)
@@ -993,6 +1001,12 @@ namespace Microsoft.EntityFrameworkCore.Diagnostics
         /// </summary>
         public static string EFConstantInvoked
             => GetString("EFConstantInvoked");
+
+        /// <summary>
+        ///     'EF.Constant()' isn't supported your by provider.
+        /// </summary>
+        public static string EFConstantNotSupported
+            => GetString("EFConstantNotSupported");
 
         /// <summary>
         ///     The EF.Constant&lt;T&gt; method is not supported when using precompiled queries.
